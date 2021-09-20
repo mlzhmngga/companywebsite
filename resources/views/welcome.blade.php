@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Company Name</title>
+    <title>{{ env('COMPANY_NAME') }}</title>
     <!-- 
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 
@@ -26,11 +26,11 @@
         <div>
             <div style="display: flex; flex-direction:column; justify-content: center; align-items:center; height:85vh ; background-image:  url('assets/company.png'); background-size: cover; ">
                 <div>
-                    <h1><strong>Welcome to Company A!</strong> </h1>
+                    <h1><strong>Selamat datang di {{ env('COMPANY_NAME') }}!</strong> </h1>
                 </div>
 
                 <div class="m-5">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    {{ env('COMPANY_DESCRIPTION') }}
                 </div>
             </div>
 
@@ -40,18 +40,30 @@
 
         <div class="m-3">
             <div class="d-flex justify-content-center my-5">
-                <h5><strong>Our Products</strong></h5>
+                <h5><strong>Paket cicilan</strong></h5>
             </div>
 
             <div class="d-flex justify-content-around">
                 <div>
                     <div>
-                        <h5>Product 1</h5>
+                        <h5>Paket 1</h5>
                     </div>
-                    <div>Description 1</div>
+                    <div>
+                        Harga 164.000.000
+
+                    </div>
+                    <div>
+                        Dp 5%
+
+                    </div>
+                    <div>
+                        Bantuan Subsidi Uang Muka 4.000.000
+                    </div>
+                    <div> Plafon kredit 155.000.000
+                    </div>
                 </div>
 
-                <div>
+                <!-- <div>
                     <div>
                         <h5>Product 2</h5>
                     </div>
@@ -70,9 +82,9 @@
                         <h5>Product 4</h5>
                     </div>
                     <div>Description 4</div>
-                </div>
+                </div> -->
 
-                
+
             </div>
 
             <!-- <div>
@@ -121,7 +133,50 @@
 
     </div>
 
+    <hr />
 
+    <div>
+        <div class="d-flex justify-content-center">
+            <h5>Contoh Rumah</h5>
+        </div>
+
+
+        <div class="d-flex my-3 justify-content-around align-items-center flex-wrap">
+            <div>
+                <a href="{{ asset('assets/rumah1.jpeg') }}" target="_blank">
+                    <img src="{{ asset('assets/rumah1.jpeg') }}" style="max-width:300px;max-height:300px" />
+                </a>
+            </div>
+            <div>
+                <a href="{{ asset('assets/rumah2.jpeg') }}" target="_blank">
+                    <img src="{{ asset('assets/rumah2.jpeg') }}" style="max-width:300px;max-height:300px" />
+                </a>
+            </div>
+            <div>
+                <a href="{{ asset('assets/rumah3.jpeg') }}" target="_blank">
+                    <img src="{{ asset('assets/rumah3.jpeg') }}" style="max-width:300px;max-height:300px" />
+                </a>
+            </div>
+            <div>
+                <a href="{{ asset('assets/rumah4.jpeg') }}" target="_blank">
+                    <img src="{{ asset('assets/rumah4.jpeg') }}" style="max-width:300px;max-height:300px" />
+                </a>
+
+            </div>
+            <div>
+                <a href="{{ asset('assets/rumah5.jpeg') }}" target="_blank">
+                    <img src="{{ asset('assets/rumah5.jpeg') }}" style="max-width:300px;max-height:300px" />
+                </a>
+            </div>
+            <div>
+                <a href="{{ asset('assets/rumah6.jpeg') }}" target="_blank">
+                    <img src="{{ asset('assets/rumah6.jpeg') }}" style="max-width:300px;max-height:300px" />
+                </a>
+            </div>
+
+
+        </div>
+    </div>
 
 
 </body>

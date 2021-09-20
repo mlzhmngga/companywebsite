@@ -47,23 +47,47 @@ class UserController extends Controller
         return Payment::where('user_id', '=', JWTAuth::parseToken()->getPayload()['sub'])->get();
     }
 
-    public function getPaymentDetails()
+    static public function mapPaymentsToPaymentDetails($payments)
     {
-        $payments = Payment::where('user_id', '=', JWTAuth::parseToken()->getPayload()['sub'])->get();
-
         $paymentDetails = [];
 
         foreach ($payments as $payment) {
             $foundPaymentDetails = PaymentDetail::where("payment_id", '=', $payment->id)->get();
 
+
             foreach ($foundPaymentDetails as $paymentDetail) {
-                array_push($paymentDetails, [
-                    'paymentDetail' => $paymentDetail
-                ]);
+                $foundPaymentDetailBase64Image = null;
+
+                try {
+                    $foundPaymentDetailBase64Image = file_get_contents('images/img_' . $paymentDetail->id);
+                } catch (\Exception $e) {
+                    $foundPaymentDetailBase64Image = null;
+                }
+
+
+                $paymentDetailObj =
+                    [
+                        'paymentDetail' => $paymentDetail,
+                        'base64Image' => '===='
+                    ];
+
+                if ($foundPaymentDetailBase64Image) {
+                    $paymentDetailObj['base64Image'] = base64_encode($foundPaymentDetailBase64Image);
+                } else {
+                    $paymentDetailObj['base64Image'] =  null;
+                }
+                array_push($paymentDetails, $paymentDetailObj);
             }
         }
 
         return $paymentDetails;
+    }
+
+    public function getPaymentDetails()
+    {
+        $payments = Payment::where('user_id', '=', JWTAuth::parseToken()->getPayload()['sub'])->get();
+
+        return $this->mapPaymentsToPaymentDetails($payments);
     }
 
 

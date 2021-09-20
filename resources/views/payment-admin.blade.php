@@ -41,6 +41,8 @@
     <script>
         let users = []
 
+        const baseUrl = document.querySelector('#base-url').value
+
         const makeDateStringUTC = (date) => {
             if (date) {
                 const y = `${date.getUTCFullYear()}`
@@ -97,6 +99,10 @@
                                                     ${user?.payments?.map((payment, j) => {
                                                         const date = payment.date ? makeDateString(new Date(payment.date)) : null;
 
+                                                        const amountInt = isNaN(parseInt(payment.amount ?? 0)) ? 0 : parseInt(payment.amount ?? 0);
+                                                        const amountWithCashback = amountInt - 10000000
+                                                        const amountWithCashbackAndInterest = amountWithCashback + (amountWithCashback * 5 / 100)
+
                                                         return `
                                                             <div class="my-1 d-flex align-items-center">
                                                                 <button class="btn btn-sm btn-danger">
@@ -133,7 +139,7 @@
                                                                         <strong  id="amount-display-years-${i}-${j}"> ${`${Intl.NumberFormat(navigator?.language ?? 'en-US', {
                                                                             style: 'currency',
                                                                             currency: 'IDR'
-                                                                        }).format(isNaN(parseInt(payment?.amount ?? '')) ? 0 : parseInt((payment?.amount ?? 0) / (payment?.years ?? 1) / 12))} each month`
+                                                                        }).format(isNaN(parseInt(payment?.amount ?? '')) ? 0 : parseInt((amountWithCashbackAndInterest) / (payment?.years ?? 1) / 12))} each month`
                                                                     }</strong>
                                                                     </div>
                                                                     
@@ -153,12 +159,19 @@
                                                                     <div class="form-floating">
                                                                         <input value="${payment?.amount ?? 0}" oninput="handleChangePaymentAmount(${i},${j})" type="number" id="amount-${i}-${j}" class="form-control"></input>
                                                                         <label for="amount-${i}-${j}">Amount</label>
-                                                                    </div>                                                                       
-                                                                    
+                                                                    </div>                                                            
+                                                                               
                                                                     <div id="amount-display-${i}-${j}">${Intl.NumberFormat(navigator?.language ?? 'en-US', { style: 'currency', currency: 'IDR' }).format(payment?.amount ?? 0)}</div>
+                                                                    <div id="amount-display-${i}-${j}-cashback">W/cashback 10m IDR: ${Intl.NumberFormat(navigator?.language ?? 'en-US', { style: 'currency', currency: 'IDR' }).format((payment?.amount ?? 0) - 10000000)}</div>
+                                                                    <div id="amount-display-${i}-${j}-interest">W/interest 5%: ${Intl.NumberFormat(navigator?.language ?? 'en-US', { style: 'currency', currency: 'IDR' }).format((payment?.amount ?? 0) - 10000000)}</div>
                                                                 </div>
                                                                 
-                                                                
+                                                                <div>
+                                                                    <a href="${baseUrl}/payment-admin/${payment.id}">
+                                                                        <button class="btn btn-sm btn-primary">Details</button>
+                                                                    </a>
+                                                                    
+                                                                </div>
                                                                 
                                                             </div>
                                                         `;
@@ -207,6 +220,10 @@
             console.log(i, j, e)
             const amount = document.querySelector(`#amount-${i}-${j}`).value
 
+            const amountInt = isNaN(parseInt(amount)) ? 0 : parseInt(amount);
+            const amountWithCashback = amountInt - 10000000
+            const amountWithCashbackAndInterest = amountWithCashback + (amountWithCashback * 5 / 100)
+
             console.log('amountVal', amount, isNaN(parseInt(amount)))
 
             users = users.map((user, ix) => i === ix ? {
@@ -221,7 +238,17 @@
             document.querySelector(`#amount-display-${i}-${j}`).innerHTML = Intl.NumberFormat(navigator?.language ?? 'en-US', {
                 style: 'currency',
                 currency: 'IDR'
-            }).format(isNaN(parseInt(amount)) ? 0 : parseInt(amount))
+            }).format(amountInt)
+
+            document.querySelector(`#amount-display-${i}-${j}-cashback`).innerHTML = 'W/cashback 10m IDR: ' + Intl.NumberFormat(navigator?.language ?? 'en-US', {
+                style: 'currency',
+                currency: 'IDR'
+            }).format(amountWithCashback)
+
+            document.querySelector(`#amount-display-${i}-${j}-interest`).innerHTML = 'W/interest 5%: ' + Intl.NumberFormat(navigator?.language ?? 'en-US', {
+                style: 'currency',
+                currency: 'IDR'
+            }).format(amountWithCashbackAndInterest)
 
             const foundUserPayment = users[i]?.payments[j];
 
@@ -229,7 +256,7 @@
                 document.querySelector(`#amount-display-years-${i}-${j}`).innerHTML = `${Intl.NumberFormat(navigator?.language ?? 'en-US', {
                     style: 'currency',
                     currency: 'IDR'
-                }).format(isNaN(parseInt(amount)) ? 0 : parseInt(amount / (foundUserPayment?.years ?? 0) / 12))} each month`
+                }).format(amountWithCashbackAndInterest / (foundUserPayment?.years ?? 0) / 12)} each month`
             }
 
 

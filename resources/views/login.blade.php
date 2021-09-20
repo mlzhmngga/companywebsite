@@ -33,7 +33,7 @@
             </div>
 
             <div class="d-flex justify-content-center">
-                <h5>Company Website Login</h5>
+                <h5>{{ env('COMPANY_SHORT_NAME') }} Login</h5>
 
             </div>
 
